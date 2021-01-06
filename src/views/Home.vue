@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld msg="Progressor (compo API)" />
-    <Form />
+    <Form @createtask="addTask" />
   </div>
 </template>
 
@@ -14,7 +14,14 @@ export default {
   name: "Home",
   components: {
     HelloWorld,
-    Form
+    Form,
+  },
+  setup() {
+    function addTask(data) {
+      console.log("Home.vue | task to add", data);
+    }
+
+    return { addTask };
   },
 };
 </script>

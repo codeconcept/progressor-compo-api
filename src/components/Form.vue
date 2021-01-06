@@ -27,7 +27,9 @@
 import { ref } from "vue";
 
 export default {
-  setup() {
+  name: "Form",
+  emits: ["createtask"],
+  setup(props, context) {
     let name = ref("");
     let description = ref("");
     const temporalityTypes = ref([
@@ -57,6 +59,7 @@ export default {
         temporality: temporality.value,
       };
       console.log("task", task);
+      context.emit("createtask", task);
       resetForm();
     }
 
