@@ -2,8 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
-      Cette app vous permet d'éviter les résolutions pour passer directement à
-      la planification de vos actions !
+      Planifiez vos actions !
     </p>
   </div>
 </template>
