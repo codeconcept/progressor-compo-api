@@ -3,7 +3,7 @@
     <div class="task" v-for="task in tasks" :key="task.id">
       <h3>{{ task.name }}</h3>
       <p>{{ task.description }}</p>
-      <p>Echéance : {{ task.temporility }}</p>
+      <p>Echéance : {{ convertCase(task.temporality) }}</p>
     </div>
   </div>
 </template>
@@ -17,7 +17,11 @@ export default {
     tasks.value = tasksService.read();
     console.log("mounted | tasks", tasks.value);
 
-    return { tasks };
+    function convertCase(temporality) {
+          return tasksService.convertCase(temporality);
+      }
+
+    return { tasks, convertCase };
   },
 };
 </script>
