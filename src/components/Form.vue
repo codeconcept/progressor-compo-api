@@ -23,13 +23,13 @@
         {{ tempo.name }}
       </option></select
     ><br />
-    <button>créer</button>
+    <button :disabled="!isFormValid">créer</button>
   </form>
   <div></div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 export default {
   name: "Form",
@@ -55,7 +55,7 @@ export default {
         value: "long-term",
       },
     ]);
-    let temporality = ref(null);
+    let temporality = ref("");
 
     function createTask() {
       const task = {
@@ -81,6 +81,18 @@ export default {
       txtName.value.focus();
     });
 
+    const isFormValid = computed(() => {
+      if (
+        name.value !== "" &&
+        description.value !== "" &&
+        temporality.value !== ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
     return {
       name,
       description,
@@ -89,6 +101,7 @@ export default {
       createTask,
       resetForm,
       txtName,
+      isFormValid,
     };
   },
 };
