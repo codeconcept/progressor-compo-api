@@ -1,5 +1,38 @@
 <template>
   <input type="text" placeholder="filtrer" v-model="letters" @keyup="filter" />
+  <div class="radio-filters">
+    <label for="all">
+      <input type="radio" id="all" value="" v-model="selectedTemporality" />
+      toutes
+    </label>
+    <label for="short-term">
+      <input
+        type="radio"
+        id="short-term"
+        value="short-term"
+        v-model="selectedTemporality"
+      />
+      court terme
+    </label>
+    <label for="medium-term">
+      <input
+        type="radio"
+        id="medium-term"
+        value="medium-term"
+        v-model="selectedTemporality"
+      />
+      moyen terme
+    </label>
+    <label for="long-term">
+      <input
+        type="radio"
+        id="long-term"
+        value="long-term"
+        v-model="selectedTemporality"
+      />
+      long terme
+    </label>
+  </div>
   <div v-show="tasksFiltered.length > 0">
     <div class="task" v-for="task in tasksFiltered" :key="task.id">
       <h3>{{ task.name }}</h3>
@@ -10,12 +43,14 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import tasksService from "@/services/tasks.js";
 export default {
   setup() {
+    console.log("selectedTemporality", selectedTemporality);
     const tasks = ref([]);
     const letters = ref("");
+    const selectedTemporality = ref("");
     let tasksFiltered = ref([]);
     tasks.value = tasksService.read();
     filter();
@@ -33,9 +68,32 @@ export default {
           t.name.toLocaleLowerCase().includes(letters.value.toLocaleLowerCase())
         );
       }
+      if (selectedTemporality.value !== "") {
+        tasksFiltered.value = tasksFiltered.value.filter(
+          (t) => t.temporality === selectedTemporality.value
+        );
+      }
     }
 
-    return { tasks, letters, tasksFiltered, convertCase, filter };
+    watch(selectedTemporality, (newValue, oldValue) => {
+      console.log("newValue: ", newValue, "oldValue: ", oldValue);
+      if (newValue !== "") {
+        filter();
+      } else {
+        // take everything then filter
+        tasksFiltered.value = tasks.value;
+        filter();
+      }
+    });
+
+    return {
+      tasks,
+      letters,
+      selectedTemporality,
+      tasksFiltered,
+      convertCase,
+      filter,
+    };
   },
 };
 </script>
@@ -45,5 +103,9 @@ export default {
   margin: 10px 15px;
   border: 3px solid #42b983;
   border-radius: 5px;
+}
+.radio-filters {
+  display: flex;
+  justify-content: center;
 }
 </style> 
