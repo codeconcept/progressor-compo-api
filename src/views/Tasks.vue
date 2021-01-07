@@ -1,6 +1,7 @@
 <template>
-  <div v-if="tasks.length > 0">
-    <div class="task" v-for="task in tasks" :key="task.id">
+  <input type="text" placeholder="filtrer" v-model="letters" @keyup="filter" />
+  <div v-show="tasksFiltered.length > 0">
+    <div class="task" v-for="task in tasksFiltered" :key="task.id">
       <h3>{{ task.name }}</h3>
       <p>{{ task.description }}</p>
       <p>Echéance : {{ convertCase(task.temporality) }}</p>
@@ -14,14 +15,27 @@ import tasksService from "@/services/tasks.js";
 export default {
   setup() {
     const tasks = ref([]);
+    const letters = ref("");
+    let tasksFiltered = ref([]);
     tasks.value = tasksService.read();
+    filter();
     console.log("mounted | tasks", tasks.value);
 
     function convertCase(temporality) {
-          return tasksService.convertCase(temporality);
-      }
+      return tasksService.convertCase(temporality);
+    }
 
-    return { tasks, convertCase };
+    function filter() {
+      if (letters.value.length === 0) {
+        tasksFiltered.value = tasks.value;
+      } else {
+        tasksFiltered.value = tasks.value.filter((t) =>
+          t.name.toLocaleLowerCase().includes(letters.value.toLocaleLowerCase())
+        );
+      }
+    }
+
+    return { tasks, letters, tasksFiltered, convertCase, filter };
   },
 };
 </script>
