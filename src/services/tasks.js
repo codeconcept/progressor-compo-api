@@ -9,6 +9,10 @@ function read() {
   return tasks;
 }
 
+function deleteTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+}
+
 function convertCase(temporalityKebabCase) {
   let result;
   switch (temporalityKebabCase) {
@@ -31,5 +35,6 @@ function convertCase(temporalityKebabCase) {
 export default {
   create,
   read,
+  deleteTask,
   convertCase,
 };
