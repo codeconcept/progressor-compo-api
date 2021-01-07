@@ -33,7 +33,7 @@
       long terme
     </label>
   </div>
-  <div v-show="tasksFiltered.length > 0">
+  <div v-show="tasksFiltered && tasksFiltered.length > 0">
     <div class="task" v-for="task in tasksFiltered" :key="task.id">
       <h3>{{ task.name }}</h3>
       <p>{{ task.description }}</p>
