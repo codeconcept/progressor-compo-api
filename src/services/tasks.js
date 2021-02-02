@@ -2,7 +2,7 @@ let tasks = [];
 const storageKey = 'tasks-vue3-compo-api-draft';
 
 function create(task) {
-  if(tasks === null) {
+  if (tasks === null) {
     tasks = [];
   }
   tasks = [task, ...tasks];
@@ -15,8 +15,18 @@ function read() {
   return tasks;
 }
 
+function updateTask(task) {
+  const index = tasks.findIndex((t) => t.id === task.id);
+  console.log('index', index);
+  if (index === -1) {
+    return;
+  }
+  tasks[index] = task;
+  save();
+}
+
 function deleteTask(id) {
-  tasks = tasks.filter(t => t.id !== id);
+  tasks = tasks.filter((t) => t.id !== id);
   save();
 }
 
@@ -44,13 +54,14 @@ function save() {
 }
 
 function retrieveTasks() {
-  const fromLocalstorage = localStorage.getItem(storageKey)
+  const fromLocalstorage = localStorage.getItem(storageKey);
   return JSON.parse(fromLocalstorage);
 }
 
 export default {
   create,
   read,
+  updateTask,
   deleteTask,
   convertCase,
 };

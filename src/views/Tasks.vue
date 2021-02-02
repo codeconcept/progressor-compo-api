@@ -96,7 +96,9 @@ export default {
     }
 
     function updateTask(task) {
-      console.log("updateTask", task);
+      tasksService.updateTask(task);
+      tasks.value = tasksService.read();
+      filter();
       cancelEdit();
     }
 
