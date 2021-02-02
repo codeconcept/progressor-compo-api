@@ -1,5 +1,5 @@
 let tasks = [];
-const storageKey = 'tasks-vue3-compo-api';
+const storageKey = 'tasks-vue3-compo-api-draft';
 
 function create(task) {
   if(tasks === null) {

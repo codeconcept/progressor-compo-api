@@ -1,4 +1,10 @@
 <template>
+  <Modal
+    v-if="isInEditMode"
+    :task="taskToEdit"
+    @updatetask="updateTask($event)"
+    @cancel="cancelEdit"
+  />
   <input type="text" placeholder="filtrer" v-model="letters" @keyup="filter" />
   <div class="radio-filters">
     <label for="all">
@@ -40,6 +46,7 @@
       <p>Echéance : {{ convertCase(task.temporality) }}</p>
       <div>
         <button class="small" @click="() => deleteTask(task.id)">suppr</button>
+        <button class="small" @click="() => toggle(task)">modif</button>
       </div>
     </div>
   </div>
@@ -48,13 +55,18 @@
 <script>
 import { ref, watch } from "vue";
 import tasksService from "@/services/tasks.js";
+import Modal from "../components/Modal.vue";
 export default {
+  components: {
+    Modal,
+  },
   setup() {
-    console.log("selectedTemporality", selectedTemporality);
     const tasks = ref([]);
     const letters = ref("");
     const selectedTemporality = ref("");
     let tasksFiltered = ref([]);
+    let isInEditMode = ref(false);
+    let taskToEdit = ref(null);
     tasks.value = tasksService.read();
     filter();
     console.log("mounted | tasks", tasks.value);
@@ -76,6 +88,21 @@ export default {
           (t) => t.temporality === selectedTemporality.value
         );
       }
+    }
+
+    function toggle(task) {
+      taskToEdit.value = task;
+      isInEditMode.value = true;
+    }
+
+    function updateTask(task) {
+      console.log("updateTask", task);
+      cancelEdit();
+    }
+
+    function cancelEdit() {
+      isInEditMode.value = false;
+      taskToEdit.value = null;
     }
 
     function deleteTask(id) {
@@ -103,6 +130,11 @@ export default {
       convertCase,
       filter,
       deleteTask,
+      isInEditMode,
+      taskToEdit,
+      toggle,
+      updateTask,
+      cancelEdit,
     };
   },
 };
